@@ -16,7 +16,7 @@ def load_site(page):
 
 def test_import_four_mebibyte_plaintext_roundtrip():
     with sync_playwright() as p:
-        browser = p.chromium.launch(args=['--host-resolver-rules=MAP onward.pat.foo 127.0.0.1'])
+        browser = p.chromium.launch()
         page = browser.new_page()
         load_site(page)
         result = page.evaluate('''async ({data,password}) => {
@@ -32,7 +32,7 @@ def test_import_four_mebibyte_plaintext_roundtrip():
 
 def test_import_api_roundtrip():
     with sync_playwright() as p:
-        browser = p.chromium.launch(args=['--host-resolver-rules=MAP onward.pat.foo 127.0.0.1'])
+        browser = p.chromium.launch()
         page = browser.new_page()
         load_site(page)
         result = page.evaluate('''async ({data,password}) => {
@@ -45,7 +45,7 @@ def test_import_api_roundtrip():
 
 def test_import_rejects_unsupported_envelopes_and_inert_markup():
     with sync_playwright() as p:
-        browser = p.chromium.launch(args=['--host-resolver-rules=MAP onward.pat.foo 127.0.0.1'])
+        browser = p.chromium.launch()
         page = browser.new_page()
         load_site(page)
         outbound = []
@@ -108,7 +108,7 @@ def open_dialog(page, file, password=PASSWORD):
 
 def test_editor_reopen_edit_reexport_preserves_draft_on_failure(tmp_path):
     with sync_playwright() as p:
-        browser = p.chromium.launch(args=['--host-resolver-rules=MAP onward.pat.foo 127.0.0.1'])
+        browser = p.chromium.launch()
         context = browser.new_context(viewport={'width':1440,'height':1000}, accept_downloads=True)
         page = context.new_page()
         load_site(page)
@@ -200,7 +200,7 @@ def test_editor_reopen_edit_reexport_preserves_draft_on_failure(tmp_path):
 
 def test_import_mobile_layout(tmp_path):
     with sync_playwright() as p:
-        browser = p.chromium.launch(args=['--host-resolver-rules=MAP onward.pat.foo 127.0.0.1'])
+        browser = p.chromium.launch()
         page = browser.new_page(viewport={'width':390,'height':844})
         load_site(page)
         page.get_by_role('button',name='Create an onward file',exact=True).click()
@@ -225,7 +225,7 @@ def test_import_mobile_layout(tmp_path):
 
 def test_busy_and_inflight_cancel_are_transactional(tmp_path):
     with sync_playwright() as p:
-        browser = p.chromium.launch(args=['--host-resolver-rules=MAP onward.pat.foo 127.0.0.1'])
+        browser = p.chromium.launch()
         page = browser.new_page(accept_downloads=True)
         load_site(page)
         page.get_by_role('button',name='Create an onward file',exact=True).click()

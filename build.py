@@ -5,6 +5,10 @@ ROOT=Path(__file__).resolve().parent
 
 def build():
     page=(ROOT/'site/index.template.html').read_text()
+    license_text=(ROOT/'LICENSE').read_text()
+    font_license=(ROOT/'licenses/SourceSerif4-OFL.txt').read_text()
+    notices=(ROOT/'THIRD_PARTY_NOTICES.md').read_text()
+    page=page.replace('/* DISTRIBUTION_LICENSES */', license_text+'\n'+notices+'\n'+font_license)
     for token,file in [('/* EDITOR_CSS */','editor.css'),('/* EXPORT_JS */','export.js'),('/* EDITOR_JS */','editor.js')]:
         source=(ROOT/'site'/file).read_text()
         if file.endswith('.js'):

@@ -6,7 +6,7 @@ ROOT=Path(__file__).resolve().parents[1]
 
 def test_landing_opens_new_editor():
     with sync_playwright() as p:
-        browser=p.chromium.launch(args=['--host-resolver-rules=MAP onward.pat.foo 127.0.0.1'])
+        browser=p.chromium.launch()
         page=browser.new_page(viewport={'width':1440,'height':1000})
         errors=[]
         page.on('pageerror',lambda e:errors.append(str(e)))

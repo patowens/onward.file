@@ -39,22 +39,44 @@ Cancel, Escape, and failed decryption preserve the current draft and prepared do
 
 WebCrypto PBKDF2 was retained for native offline browser portability and compatibility with existing files, rather than adding a downloaded crypto library. Argon2id is memory-hard and is generally preferred where available; PBKDF2 is not memory-hard. OWASP currently lists 600,000 iterations for PBKDF2-HMAC-SHA-256: https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html#pbkdf2 . This does not imply OWASP endorsement or FIPS certification of Onward.
 
-## Development and release
+## Development
 
-`site/index.template.html`, `site/editor.js`, `site/editor.css`, and `site/export.js` assemble into a self-contained `site/index.html`:
+Requires Python 3.10 or newer. From a checkout:
 
 ```sh
-python3 build.py
+python3 -m venv .venv
+.venv/bin/python -m pip install -r requirements-dev.txt
+.venv/bin/python -m playwright install chromium
+.venv/bin/python build.py
 .venv/bin/python -m pytest -q
 ```
 
-`notes/` contains private review/release evidence and legacy scripts, not served assets. Run current `tests/` and `test_auth.py` (public HTTP regression coverage); old screenshot scripts can target superseded UI. The backend is a bounded read-only HTTP service behind Caddy; only explicit public assets are served. It requires no site-access credentials and accepts no document submissions.
+On Linux, Playwright may also require system browser libraries; follow the dependency instructions printed by its installer.
 
-Canonical deployment, scoped to Onward only:
+`site/index.template.html`, `site/editor.js`, `site/editor.css`, and `site/export.js` assemble into self-contained `site/index.html`. The build includes the licence notices. Tests cover the editor, encryption, offline files, and read-only HTTP serving. Screenshot artifacts are written to ignored `notes/` folders.
+
+## Run locally
+
+Open `site/index.html` directly in a modern browser, or start the optional read-only server:
 
 ```sh
 python3 build.py
-docker compose -f /opt/dockge/stacks/proj-onward/compose.yaml up -d --build onward
+python3 server.py
 ```
 
-Port `127.0.0.1:3029` proxies to container `8000`; HTTPS is terminated by host Caddy. Keep `/opt/dockge/stacks/proj-onward/compose.yaml` authoritative. Old host `.env` credentials are no longer injected or required. `.env`, notes, templates, source modules, and tests are not public endpoints.
+Visit `http://127.0.0.1:8000`. The server accepts `HOST` and `PORT` environment variables; no credentials or `.env` file are required.
+
+Alternatively, with Docker Compose:
+
+```sh
+python3 build.py
+docker compose up -d --build
+```
+
+The included Compose configuration binds only to `127.0.0.1:8000`. For internet hosting, place the service behind an HTTPS reverse proxy. WebCrypto requires HTTPS, localhost, or a supported local-file context. The server exposes only the built page and accepts no document submissions. Do not serve the repository root as a public directory.
+
+## Licensing
+
+Onward's code is licensed under the [MIT License](LICENSE), copyright 2026 patowens.
+
+The bundled **Source Serif 4 Light** font remains under the [SIL Open Font License 1.1](licenses/SourceSerif4-OFL.txt), not MIT. See [Third-party notices](THIRD_PARTY_NOTICES.md). Offline generator copies retain both notices; exported recipient files include the MIT notice for their application code. These licences do not apply to users' private document contents.

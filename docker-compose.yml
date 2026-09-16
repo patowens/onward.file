@@ -1,2 +1,16 @@
-# Canonical stack: /opt/dockge/stacks/proj-onward/compose.yaml
-# Deploy: docker compose -f /opt/dockge/stacks/proj-onward/compose.yaml up -d --build
+services:
+  onward:
+    build: .
+    restart: unless-stopped
+    environment:
+      HOST: "0.0.0.0"
+      PORT: "8000"
+    ports:
+      - "127.0.0.1:8000:8000"
+    read_only: true
+    tmpfs:
+      - /tmp
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL

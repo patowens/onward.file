@@ -4,7 +4,7 @@ from test_import import ROOT, load_site, encrypt_download
 
 def test_offline_generator_download_and_roundtrip(tmp_path):
     with sync_playwright() as p:
-        browser=p.chromium.launch(args=['--host-resolver-rules=MAP onward.pat.foo 127.0.0.1'])
+        browser=p.chromium.launch()
         context=browser.new_context(accept_downloads=True)
         page=context.new_page()
         load_site(page)
@@ -20,6 +20,9 @@ def test_offline_generator_download_and_roundtrip(tmp_path):
         download.value.save_as(generator)
         assert download.value.suggested_filename=='onward-generator.html'
         html=generator.read_text()
+        assert (ROOT/'LICENSE').read_text().strip() in html
+        assert (ROOT/'licenses/SourceSerif4-OFL.txt').read_text().strip() in html
+        assert '© 2014 - 2021 Adobe Systems Incorporated' in html
         assert 'PRIVATE-DRAFT-MUST-NOT-BE-IN-GENERATOR' not in html
         expect(page.locator('.editor-title')).to_have_text('PRIVATE-DRAFT-MUST-NOT-BE-IN-GENERATOR')
         context.set_offline(True)
@@ -40,6 +43,7 @@ def test_offline_generator_download_and_roundtrip(tmp_path):
         offline.get_by_role('button',name='Save changes',exact=True).click()
         result=tmp_path/'offline-created.html'
         encrypted=encrypt_download(offline,result)
+        assert (ROOT/'LICENSE').read_text().strip() in encrypted
         assert 'Created entirely offline' not in encrypted
         # Downloading another clean generator also works without the hosted site.
         with offline.expect_download() as again:

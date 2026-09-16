@@ -5,7 +5,7 @@ from test_import import load_site, ROOT
 
 def test_encrypt_explains_real_encryption_and_limits():
     with sync_playwright() as p:
-        browser=p.chromium.launch(args=['--host-resolver-rules=MAP onward.pat.foo 127.0.0.1'])
+        browser=p.chromium.launch()
         page=browser.new_page()
         load_site(page)
         page.get_by_role('button',name='Create an onward file',exact=True).click()

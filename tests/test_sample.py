@@ -7,7 +7,7 @@ MESSAGE = 'Mary, this file contains account details and passwords.\nYou have the
 
 def test_sample_modal_download_offline(tmp_path):
     with sync_playwright() as p:
-        browser = p.chromium.launch(args=['--host-resolver-rules=MAP onward.pat.foo 127.0.0.1'])
+        browser = p.chromium.launch()
         context = browser.new_context(accept_downloads=True)
         page = context.new_page()
         load_site(page)

@@ -6,7 +6,7 @@ ROOT=Path(__file__).resolve().parents[1]
 
 def test_edit_encrypt_download_offline(tmp_path):
     with sync_playwright() as p:
-        browser=p.chromium.launch(args=['--host-resolver-rules=MAP onward.pat.foo 127.0.0.1'])
+        browser=p.chromium.launch()
         context=browser.new_context(viewport={'width':1440,'height':1000},accept_downloads=True)
         page=context.new_page()
         errors=[]
