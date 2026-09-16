@@ -1,0 +1,5 @@
+# Deny by default: only the server and self-contained built HTML.
+**
+!server.py
+!site/
+!site/index.html

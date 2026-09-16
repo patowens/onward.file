@@ -1,0 +1,2 @@
+# Canonical stack: /opt/dockge/stacks/proj-onward/compose.yaml
+# Deploy: docker compose -f /opt/dockge/stacks/proj-onward/compose.yaml up -d --build

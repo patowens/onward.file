@@ -1,0 +1,4 @@
+# Development/release verification only; the shipped HTML has no package dependencies.
+pytest==9.1.1
+playwright==1.62.0
+cryptography==50.0.1
